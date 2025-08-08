@@ -1,0 +1,15 @@
+variable "environment" {
+  type = string
+}
+
+variable "eks_vpc_id" {
+  type = string
+}
+
+variable "rds_vpc_id" {
+  type = string
+}
+
+variable "public_ips" {
+  type = list(string)
+}

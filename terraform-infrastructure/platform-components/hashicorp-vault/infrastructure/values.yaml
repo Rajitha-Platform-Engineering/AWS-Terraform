@@ -1,0 +1,13 @@
+# Enabled in Dev Mode for now
+server:
+  dev:
+    enabled: true
+
+  server:
+    extraArgs: "-log-level=debug"
+
+ui:
+  enabled: true
+
+injector:
+  enabled: false

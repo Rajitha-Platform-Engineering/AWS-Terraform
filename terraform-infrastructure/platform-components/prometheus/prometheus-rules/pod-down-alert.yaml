@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-alerts
+  namespace: prometheus
+  labels:
+    release: prometheus
+spec:
+  groups:
+    - name: PodDownAlerts
+      rules:
+        - alert: AppPodDown
+          expr: |
+            kube_pod_container_status_waiting_reason{job="kube-state-metrics", namespace=~".*", reason="CrashLoopBackOff"} 
+            unless 
+            kube_pod_status_phase{job="kube-state-metrics", namespace=~".*", phase="Running"} == 1
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Pod is down in namespace magento-dev"
+            description: "The application pod has been down for more than 1 minute."

@@ -1,0 +1,30 @@
+primary:
+  extraFlags: "--log-bin-trust-function-creators=1"
+  service:
+    type: ClusterIP
+  persistence:
+    enabled: true
+    storageClass: "gp2"
+    size: "10Gi"
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+
+secondary:
+  persistence:
+    enabled: false
+
+auth:
+  rootPassword: "abc12345678"
+  username: "magento_user"
+  password: "abc12345678"
+  database: "magento_db"
+
+metrics:
+  enabled: true
+  service:
+    type: ClusterIP

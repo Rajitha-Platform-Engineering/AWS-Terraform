@@ -1,0 +1,28 @@
+# This AlertManager config is created as a K8S secret in prometheus namespace
+# The Terraform K8S secret resource is in under terraform-infrastructure/kubernetes-resources/k8s-prometheus-secret directory
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: config-test
+  namespace: prometheus  # Ensure it's in the correct namespace
+  labels:
+    release: prometheus
+spec:
+  route:
+    groupBy: ['alertname']
+    receiver: 'slack-notifications'
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 3h
+    routes:
+      - receiver: 'slack-notifications'
+        continue: true
+  receivers:
+    - name: 'slack-notifications'
+      slackConfigs:
+        - channel: "#devops-alerts-new"
+          apiURL:
+            key: slack_webhook_url
+            name: slack-webhook  # Reference to the secret name
+          title: "🚨 Alert: {{ .CommonAnnotations.summary }}"
+          text: "{{ .CommonAnnotations.description }}"
